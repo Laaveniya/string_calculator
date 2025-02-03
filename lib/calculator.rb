@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
+require_relative 'string_sanitizer.rb'
+
 class Calculator
+  include StringSanitizer
+
   def add(string)
     sum = 0
     negatives = []
     sanitize_string(string).split(',').each do |number|
-      sum += number.to_i if number.to_i.positive?
-      negatives << number if number.to_i.negative?
+      sum, negatives = manipulate(number, sum, negatives)
     end
     raise "negatives not allowed: #{negatives.join(', ')}" if negatives.any?
     sum
@@ -14,9 +17,9 @@ class Calculator
 
   private
 
-  def sanitize_string(string)
-    delimiter = "\n"
-    delimiter = string.lines.first[2] if string.start_with?('//')
-    string.gsub(delimiter, ',')
+  def manipulate(number, sum, negatives)
+    sum += number.to_i if number.to_i.positive?
+    negatives << number if number.to_i.negative?
+    [sum, negatives]
   end
 end
