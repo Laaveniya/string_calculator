@@ -26,9 +26,15 @@ RSpec.describe Calculator do
       end
     end
 
-    context 'support different delimters' do
+    context 'support different delimiters' do
       it 'returns the sum when the delimiter is a semicolon' do
         expect(subject.add("//;\n1;2")).to eq(3)
+      end
+    end
+
+    context 'when the numbers are negative' do
+      it 'raises an exception' do
+        expect { subject.add('1,-2') }.to raise_error('negatives not allowed: -2')
       end
     end
   end
