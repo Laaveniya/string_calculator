@@ -37,5 +37,23 @@ RSpec.describe Calculator do
         expect { subject.add('1,-2') }.to raise_error('negatives not allowed: -2')
       end
     end
+
+    context 'when there are numbers greater than 1000' do
+      it 'returns the sum without the numbers greater than 1000' do
+        expect(subject.add('1,1001')).to eq(1)
+      end
+    end
+
+    context 'when the delimiter is more than one character' do
+      it 'returns the sum of the numbers in the string' do
+        expect(subject.add("//[***]\n1***2***3")).to eq(6)
+      end
+    end
+
+    context 'when there are multiple delimiters' do
+      it 'returns the sum of the numbers in the string' do
+        expect(subject.add("//[*][%]\n1*2%3")).to eq(6)
+      end
+    end
   end
 end

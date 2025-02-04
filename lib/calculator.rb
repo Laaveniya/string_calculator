@@ -9,6 +9,12 @@ class Calculator
     negatives = string.scan(/-\d+/)
 
     raise "negatives not allowed: #{negatives.join(', ')}" unless negatives.empty?
-    sanitize_string(string).split(',').inject(0) { |sum, str| sum + (str.to_i.positive? ? str.to_i : 0) }
+    sanitize_string(string).inject(0) { |sum, str| compute_sum(str, sum) }
+  end
+
+  private
+
+  def compute_sum(str, sum)
+    sum + (str.to_i.positive? && str.to_i < 1000 ? str.to_i : 0)
   end
 end
