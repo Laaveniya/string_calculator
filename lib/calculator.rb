@@ -6,20 +6,9 @@ class Calculator
   include StringSanitizer
 
   def add(string)
-    sum = 0
-    negatives = []
-    sanitize_string(string).split(',').each do |number|
-      sum, negatives = manipulate(number, sum, negatives)
-    end
-    raise "negatives not allowed: #{negatives.join(', ')}" if negatives.any?
-    sum
-  end
+    negatives = string.scan(/-\d+/)
 
-  private
-
-  def manipulate(number, sum, negatives)
-    sum += number.to_i if number.to_i.positive?
-    negatives << number if number.to_i.negative?
-    [sum, negatives]
+    raise "negatives not allowed: #{negatives.join(', ')}" unless negatives.empty?
+    sanitize_string(string).split(',').inject(0) { |sum, str| sum + (str.to_i.positive? ? str.to_i : 0) }
   end
 end
